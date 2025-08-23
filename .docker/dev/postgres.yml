@@ -11,12 +11,11 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init:/docker-entrypoint-initdb.d/
-    networks:
-      - task-mgmt-network
+    # networks:
+    #   - task-mgmt-network
 
 volumes:
   postgres_data:
-
-networks:
-  task-mgmt-network:
-    driver: bridge
+# networks:
+#   task-mgmt-network:
+#     driver: bridge
