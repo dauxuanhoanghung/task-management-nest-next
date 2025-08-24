@@ -7,7 +7,7 @@ import { join } from 'path';
 import { DataSource } from 'typeorm';
 
 import { UserModule } from './modules/user/users.module';
-import { User } from './modules/user/user.entity';
+import { AccountModule } from './modules/account/account.module';
 
 @Module({
   imports: [
@@ -44,6 +44,7 @@ import { User } from './modules/user/user.entity';
       },
     }),
     UserModule,
+    AccountModule
   ],
 })
 export class AppModule {
