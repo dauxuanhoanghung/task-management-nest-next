@@ -10,12 +10,11 @@ services:
       - "15672:15672" # Management UI
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
-    networks:
-      - task-mgmt-network
+    # networks:
+    #   - task-mgmt-network
 
 volumes:
   rabbitmq_data:
-
-networks:
-  task-mgmt-network:
-    external: true
+# networks:
+#   task-mgmt-network:
+#     external: true

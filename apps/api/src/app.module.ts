@@ -2,24 +2,50 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
-import { UserModule } from './modules/user/user.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { join } from 'path';
+import { DataSource } from 'typeorm';
+
+import { UserModule } from './modules/user/users.module';
+import { User } from './modules/user/user.entity';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      cache: true,
+      envFilePath: ['.env', '.env.dev'],
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get('POSTGRES_HOST'),
+        port: +configService.get('POSTGRES_PORT'),
+        username: configService.get('POSTGRES_USER'),
+        password: configService.get('POSTGRES_PASSWORD'),
+        database: configService.get('POSTGRES_DB'),
+        autoLoadEntities: true,
+        synchronize: true,
+      }),
+      inject: [ConfigService],
+    }),
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       driver: ApolloDriver,
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        typePaths: [
-          configService.get<string>('GRAPHQL_TYPE_PATHS', './**/*.graphql'),
-          './**/*.graphql',
-          './**/*.gql',
-        ],
-        playground: true,
-      }),
       inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => {
+        return {
+          autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+          sortSchema: true,
+          playground: configService.get<boolean>('GRAPHQL_PLAYGROUND') ?? true,
+          path: '/graphql',
+        };
+      },
     }),
     UserModule,
   ],
 })
-export class AppModule {}
+export class AppModule {
+  // constructor(private dataSource: DataSource) {}
+}
