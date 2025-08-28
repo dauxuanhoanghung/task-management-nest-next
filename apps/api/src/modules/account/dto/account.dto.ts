@@ -1,5 +1,12 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsNotEmpty, IsString, IsEmail, MinLength, IsEnum, IsOptional } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsEmail,
+  MinLength,
+  IsEnum,
+  IsOptional,
+} from 'class-validator';
 import { AccountStatus } from '../account.entitty';
 
 import { registerEnumType } from '@nestjs/graphql';

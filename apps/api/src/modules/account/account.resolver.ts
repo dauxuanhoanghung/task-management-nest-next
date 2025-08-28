@@ -4,10 +4,9 @@ import { AccountService } from './account.service';
 import { CreateAccountInput, UpdateAccountInput } from './dto/account.dto';
 import { AccountModel } from './models/account.model';
 
-
 @Resolver(() => AccountModel)
 export class AccountResolver {
-  constructor(private readonly accountService: AccountService) { }
+  constructor(private readonly accountService: AccountService) {}
 
   // Queries
   @Query(() => [AccountModel], { name: 'findAllAccounts' })
@@ -16,12 +15,16 @@ export class AccountResolver {
   }
 
   @Query(() => AccountModel, { name: 'findByIdAccount' })
-  async findById(@Args('id', { type: () => Int }) id: number): Promise<AccountModel> {
+  async findById(
+    @Args('id', { type: () => Int }) id: number,
+  ): Promise<AccountModel> {
     return this.accountService.findById(id);
   }
 
   @Query(() => AccountModel, { name: 'findByEmailAccount' })
-  async findByEmail(@Args('email', { type: () => String }) email: string): Promise<AccountModel> {
+  async findByEmail(
+    @Args('email', { type: () => String }) email: string,
+  ): Promise<AccountModel> {
     return this.accountService.findByEmail(email);
   }
 
@@ -32,7 +35,9 @@ export class AccountResolver {
 
   // Mutations
   @Mutation(() => AccountModel, { name: 'createAccount' })
-  async create(@Args('input') input: CreateAccountInput): Promise<AccountModel> {
+  async create(
+    @Args('input') input: CreateAccountInput,
+  ): Promise<AccountModel> {
     return this.accountService.createAccount(input);
   }
 
