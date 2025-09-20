@@ -7,7 +7,7 @@ import { join } from 'path';
 import { DataSource } from 'typeorm';
 
 import { UserModule } from './modules/user/users.module';
-import { User } from './modules/user/user.entity';
+import { AccountModule } from './modules/account/account.module';
 
 @Module({
   imports: [
@@ -18,16 +18,23 @@ import { User } from './modules/user/user.entity';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('POSTGRES_HOST'),
-        port: +configService.get('POSTGRES_PORT'),
-        username: configService.get('POSTGRES_USER'),
-        password: configService.get('POSTGRES_PASSWORD'),
-        database: configService.get('POSTGRES_DB'),
-        autoLoadEntities: true,
-        synchronize: true,
-      }),
+      useFactory: (configService: ConfigService) => {
+        const isLocal =
+          configService.get('MODE', 'dev').toLowerCase() === 'dev';
+
+        return {
+          type: 'postgres',
+          host: configService.get('POSTGRES_HOST'),
+          port: +configService.get('POSTGRES_PORT'),
+          username: configService.get('POSTGRES_USER'),
+          password: configService.get('POSTGRES_PASSWORD'),
+          database: configService.get('POSTGRES_DB'),
+          autoLoadEntities: true,
+          synchronize: true,
+          logging: isLocal,
+          logger: isLocal ? 'advanced-console' : undefined,
+        };
+      },
       inject: [ConfigService],
     }),
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
@@ -44,6 +51,7 @@ import { User } from './modules/user/user.entity';
       },
     }),
     UserModule,
+    AccountModule,
   ],
 })
 export class AppModule {
