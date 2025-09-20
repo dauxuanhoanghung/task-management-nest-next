@@ -4,20 +4,28 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "codegen": "graphql-codegen",
+    "predev": "yarn codegen",
     "dev": "next dev --turbopack --port 3000",
     "build": "next build",
+    "prestart": "codegen",
     "start": "next start",
     "lint": "next lint --max-warnings 0",
     "check-types": "tsc --noEmit"
   },
   "dependencies": {
+    "@apollo/client": "^4.0.5",
+    "@apollo/client-integration-nextjs": "^0.13.1",
     "@repo/ui": "*",
+    "graphql": "^16.11.0",
     "lucide-react": "^0.544.0",
     "next": "^15.5.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
+    "@eddeee888/gcg-operation-location-migration": "^0.1.0",
+    "@graphql-codegen/cli": "^6.0.0",
     "@repo/eslint-config": "*",
     "@repo/tailwind-config": "*",
     "@repo/typescript-config": "*",
