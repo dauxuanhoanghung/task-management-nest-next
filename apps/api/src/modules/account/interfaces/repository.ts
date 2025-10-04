@@ -1,5 +1,5 @@
-import { Account, AccountStatus } from "../account.entitty";
-import { CreateAccountInput, UpdateAccountInput } from "../dto/account.dto";
+import { Account } from '../account.entity';
+import { CreateAccountInput, UpdateAccountInput } from '../dto/account.dto';
 
 export const IAccountRepository = 'IAccountRepository';
 
@@ -9,7 +9,10 @@ export interface IAccountRepository {
   findById(id: number): Promise<Account | null>;
   findByEmail(email: string): Promise<Account | null>;
   createAccount(account: CreateAccountInput): Promise<Account>;
-  updateAccount(id: number, update: UpdateAccountInput): Promise<Account | null>;
+  updateAccount(
+    id: number,
+    update: UpdateAccountInput,
+  ): Promise<Account | null>;
   deleteAccount(id: number): Promise<boolean>;
 
   // 2. Check status

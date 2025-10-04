@@ -4,7 +4,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
-import { DataSource } from 'typeorm';
 
 import { UserModule } from './modules/user/users.module';
 import { AccountModule } from './modules/account/account.module';
@@ -20,7 +19,7 @@ import { AccountModule } from './modules/account/account.module';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
         const isLocal =
-          configService.get('MODE', 'dev').toLowerCase() === 'dev';
+          configService.get<string>('MODE', 'dev').toLowerCase() === 'dev';
 
         return {
           type: 'postgres',
@@ -41,7 +40,7 @@ import { AccountModule } from './modules/account/account.module';
       driver: ApolloDriver,
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => {
+      useFactory: (configService: ConfigService) => {
         return {
           autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
           sortSchema: true,

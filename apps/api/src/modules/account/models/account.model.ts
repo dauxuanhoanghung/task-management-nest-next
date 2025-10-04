@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { AccountStatus } from '../account.entitty';
+import { AccountStatus } from '../account.entity';
 
 @ObjectType()
 export class AccountModel {
@@ -10,7 +10,7 @@ export class AccountModel {
   email: string;
 
   @Field(() => AccountStatus)
-  status: AccountStatus
+  status: AccountStatus;
 
   @Field()
   createdAt: Date;

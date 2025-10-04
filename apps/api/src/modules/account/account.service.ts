@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Account } from './account.entitty';
+import { Account } from './account.entity';
 import { IAccountRepository } from './interfaces/repository';
 import { Inject } from '@nestjs/common';
 import { CreateAccountInput, UpdateAccountInput } from './dto/account.dto';
@@ -9,7 +9,7 @@ export class AccountService {
   constructor(
     @Inject('IAccountRepository')
     private readonly accountRepository: IAccountRepository,
-  ) { }
+  ) {}
 
   // 1. CRUD
   async findAll(): Promise<Account[]> {
@@ -36,7 +36,10 @@ export class AccountService {
     return this.accountRepository.createAccount(account);
   }
 
-  async updateAccount(id: number, update: UpdateAccountInput): Promise<Account> {
+  async updateAccount(
+    id: number,
+    update: UpdateAccountInput,
+  ): Promise<Account> {
     const updated = await this.accountRepository.updateAccount(id, update);
     if (!updated) {
       throw new NotFoundException(`Account with id ${id} not found`);

@@ -4,7 +4,7 @@ import { AccountService } from './account.service';
 import { AccountResolver } from './account.resolver';
 import { IAccountRepository } from './interfaces/repository';
 import { AccountRepository } from './account.repository';
-import { Account } from './account.entitty';
+import { Account } from './account.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Account])],
@@ -17,4 +17,4 @@ import { Account } from './account.entitty';
     },
   ],
 })
-export class AccountModule { }
+export class AccountModule {}

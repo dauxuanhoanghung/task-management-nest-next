@@ -1,4 +1,12 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, BeforeInsert, BeforeUpdate } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  BeforeInsert,
+  BeforeUpdate,
+} from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
 export enum AccountStatus {
@@ -23,7 +31,6 @@ export class Account {
     enum: AccountStatus,
     default: AccountStatus.ACTIVE,
   })
-
   status: AccountStatus;
 
   @CreateDateColumn({ type: 'timestamp' })
@@ -41,4 +48,3 @@ export class Account {
     }
   }
 }
-

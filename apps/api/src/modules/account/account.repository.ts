@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Account, AccountStatus } from './account.entitty';
+import { Account, AccountStatus } from './account.entity';
 import { IAccountRepository } from './interfaces/repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
@@ -10,7 +10,7 @@ export class AccountRepository implements IAccountRepository {
   constructor(
     @InjectRepository(Account)
     private accountRepository: Repository<Account>,
-  ) { }
+  ) {}
 
   // 1. CRUD
   async findAll(): Promise<Account[]> {
@@ -33,7 +33,10 @@ export class AccountRepository implements IAccountRepository {
     return this.accountRepository.save(newAccount);
   }
 
-  async updateAccount(id: number, update: Partial<Account>): Promise<Account | null> {
+  async updateAccount(
+    id: number,
+    update: Partial<Account>,
+  ): Promise<Account | null> {
     const account = await this.accountRepository.findOne({ where: { id } });
     if (!account) {
       return null;
@@ -50,7 +53,9 @@ export class AccountRepository implements IAccountRepository {
 
   // 2. Check status
   async findActive(): Promise<Account[]> {
-    return this.accountRepository.find({ where: { status: AccountStatus.ACTIVE } });
+    return this.accountRepository.find({
+      where: { status: AccountStatus.ACTIVE },
+    });
   }
 
   // 3. Authentication
@@ -59,7 +64,10 @@ export class AccountRepository implements IAccountRepository {
     return count > 0;
   }
 
-  async validateLogin(email: string, password: string): Promise<Account | null> {
+  async validateLogin(
+    email: string,
+    password: string,
+  ): Promise<Account | null> {
     const account = await this.findByEmail(email);
     if (!account) return null;
 

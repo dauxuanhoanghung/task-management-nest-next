@@ -7,7 +7,7 @@ import {
   IsEnum,
   IsOptional,
 } from 'class-validator';
-import { AccountStatus } from '../account.entitty';
+import { AccountStatus } from '../account.entity';
 
 import { registerEnumType } from '@nestjs/graphql';
 

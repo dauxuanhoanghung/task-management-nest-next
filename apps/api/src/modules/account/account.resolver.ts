@@ -1,5 +1,4 @@
 import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
-import { Account, AccountStatus } from './account.entitty';
 import { AccountService } from './account.service';
 import { CreateAccountInput, UpdateAccountInput } from './dto/account.dto';
 import { AccountModel } from './models/account.model';
