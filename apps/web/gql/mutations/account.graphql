@@ -1,0 +1,27 @@
+# Account Mutations
+
+mutation Register($input: RegisterInput!) {
+  register(input: $input) {
+    id
+    email
+    status
+    createdAt
+    updatedAt
+  }
+}
+
+mutation Login($input: LoginInput!) {
+  login(input: $input) {
+    id
+    email
+    status
+  }
+}
+
+mutation ChangePassword($input: ChangePasswordInput!) {
+  changePassword(input: $input) {
+    id
+    email
+    status
+  }
+}

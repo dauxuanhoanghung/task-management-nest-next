@@ -4,16 +4,20 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  BeforeInsert,
-  BeforeUpdate,
 } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+
+import { registerEnumType } from '@nestjs/graphql';
 
 export enum AccountStatus {
   INACTIVE = 0,
   ACTIVE = 1,
   SUSPENDED = 2,
 }
+
+registerEnumType(AccountStatus, {
+  name: 'AccountStatus',
+  description: 'Account status enum',
+});
 
 @Entity()
 export class Account {
@@ -38,13 +42,4 @@ export class Account {
 
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
-
-  @BeforeInsert()
-  @BeforeUpdate()
-  async hashPassword() {
-    if (this.password) {
-      const salt = await bcrypt.genSalt(10);
-      this.password = await bcrypt.hash(this.password, salt);
-    }
-  }
 }
