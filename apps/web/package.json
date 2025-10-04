@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "codegen": "graphql-codegen",
+    "codegen": "graphql-codegen --config codegen.ts",
     "predev": "yarn codegen",
     "dev": "next dev --turbopack --port 3000",
     "build": "next build",
@@ -25,7 +25,11 @@
   },
   "devDependencies": {
     "@eddeee888/gcg-operation-location-migration": "^0.1.0",
-    "@graphql-codegen/cli": "^6.0.0",
+    "@graphql-codegen/cli": "6.0.0",
+    "@graphql-codegen/client-preset": "5.0.2",
+    "@graphql-codegen/typed-document-node": "^6.0.1",
+    "@graphql-codegen/typescript": "^5.0.1",
+    "@graphql-codegen/typescript-operations": "^5.0.1",
     "@repo/eslint-config": "*",
     "@repo/tailwind-config": "*",
     "@repo/typescript-config": "*",

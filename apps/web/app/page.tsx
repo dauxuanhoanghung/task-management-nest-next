@@ -1,13 +1,11 @@
-import Image, {type ImageProps} from "next/image";
+import Image, { type ImageProps } from "next/image";
 
-import {Button} from "@repo/ui/components/ui/button";
+import { Button } from "@repo/ui/components/ui/button";
 // want a alias
-import {Button as WebButton} from "@/components/button";
+import { Button as WebButton } from "@/components/button";
+import { GetUsersDocument, UserModel } from "@/gql";
+import { getClient } from "@/lib/apollo-client";
 import styles from "./page.module.css";
-import {getClient} from "@/lib/apollo-client";
-import {UserModel} from "@/gql/graphql";
-import {gql} from "@apollo/client";
-import {GET_USERS} from "@/gql/queries/user";
 
 type Props = Omit<ImageProps, "src"> & {
   srcLight: string;
@@ -15,7 +13,7 @@ type Props = Omit<ImageProps, "src"> & {
 };
 
 const ThemeImage = (props: Props) => {
-  const {srcLight, srcDark, ...rest} = props;
+  const { srcLight, srcDark, ...rest } = props;
 
   return (
     <>
@@ -30,11 +28,11 @@ async function getUsers(): Promise<UserModel[]> {
   const client = getClient();
 
   try {
-    const {data} = await client.query({
-      query: GET_USERS,
+    const { data } = await client.query({
+      query: GetUsersDocument,
     });
 
-    return (data as {getUsers: UserModel[]}).getUsers || [];
+    return (data as { getUsers: UserModel[] }).getUsers || [];
   } catch (error) {
     console.error("Error fetching users:", error);
     return [];
@@ -43,6 +41,8 @@ async function getUsers(): Promise<UserModel[]> {
 
 export default async function Home() {
   const users = await getUsers();
+
+  console.log("Fetched users:", users);
 
   return (
     <div className={styles.page}>
