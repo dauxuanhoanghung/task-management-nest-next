@@ -1,45 +1,37 @@
 import { InputType, Field } from '@nestjs/graphql';
-import {
-  IsNotEmpty,
-  IsString,
-  IsEmail,
-  MinLength,
-  IsEnum,
-  IsOptional,
-} from 'class-validator';
-import { AccountStatus } from '../account.entity';
-
-import { registerEnumType } from '@nestjs/graphql';
-
-registerEnumType(AccountStatus, {
-  name: 'AccountStatus',
-  description: 'The status of the account',
-});
+import { IsEmail, MinLength } from 'class-validator';
 
 @InputType()
-export class CreateAccountInput {
+export class RegisterInput {
   @Field()
   @IsEmail()
-  @IsNotEmpty()
   email: string;
 
   @Field()
-  @IsString()
   @MinLength(6)
-  @IsNotEmpty()
   password: string;
 }
 
 @InputType()
-export class UpdateAccountInput {
-  @Field({ nullable: true })
-  @IsString()
-  @MinLength(6)
-  @IsOptional()
-  password?: string;
+export class LoginInput {
+  @Field()
+  @IsEmail()
+  email: string;
 
-  @Field(() => AccountStatus, { nullable: true })
-  @IsEnum(AccountStatus)
-  @IsOptional()
-  status?: AccountStatus;
+  @Field()
+  password: string;
+}
+
+@InputType()
+export class ChangePasswordInput {
+  @Field()
+  @IsEmail()
+  email: string;
+
+  @Field()
+  oldPassword: string;
+
+  @Field()
+  @MinLength(6)
+  newPassword: string;
 }

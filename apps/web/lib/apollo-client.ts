@@ -1,13 +1,13 @@
 // Use In React Server Component (RSC) to create the Apollo Client
 
-import {HttpLink} from "@apollo/client";
+import { HttpLink } from "@apollo/client";
 import {
   registerApolloClient,
   ApolloClient,
   InMemoryCache,
 } from "@apollo/client-integration-nextjs";
 
-export const {getClient, query, PreloadQuery} = registerApolloClient(() => {
+export const { getClient, query, PreloadQuery } = registerApolloClient(() => {
   return new ApolloClient({
     cache: new InMemoryCache(),
     link: new HttpLink({

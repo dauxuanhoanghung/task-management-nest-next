@@ -38,16 +38,17 @@ export type AccountModel = {
   updatedAt: Scalars["DateTime"]["output"];
 };
 
-/** The status of the account */
+/** Account status enum */
 export enum AccountStatus {
   Active = "ACTIVE",
   Inactive = "INACTIVE",
   Suspended = "SUSPENDED",
 }
 
-export type CreateAccountInput = {
+export type ChangePasswordInput = {
   email: Scalars["String"]["input"];
-  password: Scalars["String"]["input"];
+  newPassword: Scalars["String"]["input"];
+  oldPassword: Scalars["String"]["input"];
 };
 
 export type CreateUserInput = {
@@ -55,26 +56,26 @@ export type CreateUserInput = {
   lastName: Scalars["String"]["input"];
 };
 
-export type Mutation = {
-  __typename?: "Mutation";
-  createAccount: AccountModel;
-  createUser: UserModel;
-  deleteAccount: Scalars["Boolean"]["output"];
-  deleteUser: Scalars["Boolean"]["output"];
-  login: AccountModel;
-  updateAccount: AccountModel;
+export type LoginInput = {
+  email: Scalars["String"]["input"];
+  password: Scalars["String"]["input"];
 };
 
-export type MutationCreateAccountArgs = {
-  input: CreateAccountInput;
+export type Mutation = {
+  __typename?: "Mutation";
+  changePassword: AccountModel;
+  createUser: UserModel;
+  deleteUser: Scalars["Boolean"]["output"];
+  login: AccountModel;
+  register: AccountModel;
+};
+
+export type MutationChangePasswordArgs = {
+  input: ChangePasswordInput;
 };
 
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
-};
-
-export type MutationDeleteAccountArgs = {
-  id: Scalars["Int"]["input"];
 };
 
 export type MutationDeleteUserArgs = {
@@ -82,40 +83,26 @@ export type MutationDeleteUserArgs = {
 };
 
 export type MutationLoginArgs = {
-  email: Scalars["String"]["input"];
-  password: Scalars["String"]["input"];
+  input: LoginInput;
 };
 
-export type MutationUpdateAccountArgs = {
-  id: Scalars["Int"]["input"];
-  input: UpdateAccountInput;
+export type MutationRegisterArgs = {
+  input: RegisterInput;
 };
 
 export type Query = {
   __typename?: "Query";
-  findActiceAccount: Array<AccountModel>;
-  findAllAccounts: Array<AccountModel>;
-  findByEmailAccount: AccountModel;
-  findByIdAccount: AccountModel;
   getUser?: Maybe<UserModel>;
   getUsers: Array<UserModel>;
-};
-
-export type QueryFindByEmailAccountArgs = {
-  email: Scalars["String"]["input"];
-};
-
-export type QueryFindByIdAccountArgs = {
-  id: Scalars["Int"]["input"];
 };
 
 export type QueryGetUserArgs = {
   id: Scalars["Float"]["input"];
 };
 
-export type UpdateAccountInput = {
-  password?: InputMaybe<Scalars["String"]["input"]>;
-  status?: InputMaybe<AccountStatus>;
+export type RegisterInput = {
+  email: Scalars["String"]["input"];
+  password: Scalars["String"]["input"];
 };
 
 export type UserModel = {
@@ -127,41 +114,97 @@ export type UserModel = {
   lastName: Scalars["String"]["output"];
 };
 
-export type GetUsersQueryVariables = Exact<{ [key: string]: never }>;
+export type RegisterMutationVariables = Exact<{
+  input: RegisterInput;
+}>;
 
-export type GetUsersQuery = {
-  __typename?: "Query";
-  getUsers: Array<{
-    __typename?: "UserModel";
+export type RegisterMutation = {
+  __typename?: "Mutation";
+  register: {
+    __typename?: "AccountModel";
     id: number;
-    firstName: string;
-    lastName: string;
-    fullName: string;
-    isActive: boolean;
-  }>;
+    email: string;
+    status: AccountStatus;
+    createdAt: any;
+    updatedAt: any;
+  };
 };
 
-export const GetUsersDocument = {
+export type LoginMutationVariables = Exact<{
+  input: LoginInput;
+}>;
+
+export type LoginMutation = {
+  __typename?: "Mutation";
+  login: {
+    __typename?: "AccountModel";
+    id: number;
+    email: string;
+    status: AccountStatus;
+  };
+};
+
+export type ChangePasswordMutationVariables = Exact<{
+  input: ChangePasswordInput;
+}>;
+
+export type ChangePasswordMutation = {
+  __typename?: "Mutation";
+  changePassword: {
+    __typename?: "AccountModel";
+    id: number;
+    email: string;
+    status: AccountStatus;
+  };
+};
+
+export const RegisterDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
-      operation: "query",
-      name: { kind: "Name", value: "GetUsers" },
+      operation: "mutation",
+      name: { kind: "Name", value: "Register" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "RegisterInput" },
+            },
+          },
+        },
+      ],
       selectionSet: {
         kind: "SelectionSet",
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "getUsers" },
+            name: { kind: "Name", value: "register" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
             selectionSet: {
               kind: "SelectionSet",
               selections: [
                 { kind: "Field", name: { kind: "Name", value: "id" } },
-                { kind: "Field", name: { kind: "Name", value: "firstName" } },
-                { kind: "Field", name: { kind: "Name", value: "lastName" } },
-                { kind: "Field", name: { kind: "Name", value: "fullName" } },
-                { kind: "Field", name: { kind: "Name", value: "isActive" } },
+                { kind: "Field", name: { kind: "Name", value: "email" } },
+                { kind: "Field", name: { kind: "Name", value: "status" } },
+                { kind: "Field", name: { kind: "Name", value: "createdAt" } },
+                { kind: "Field", name: { kind: "Name", value: "updatedAt" } },
               ],
             },
           },
@@ -169,4 +212,113 @@ export const GetUsersDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<GetUsersQuery, GetUsersQueryVariables>;
+} as unknown as DocumentNode<RegisterMutation, RegisterMutationVariables>;
+export const LoginDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "Login" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "LoginInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "login" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "email" } },
+                { kind: "Field", name: { kind: "Name", value: "status" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<LoginMutation, LoginMutationVariables>;
+export const ChangePasswordDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "ChangePassword" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "input" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "ChangePasswordInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "changePassword" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "input" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+                { kind: "Field", name: { kind: "Name", value: "email" } },
+                { kind: "Field", name: { kind: "Name", value: "status" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  ChangePasswordMutation,
+  ChangePasswordMutationVariables
+>;

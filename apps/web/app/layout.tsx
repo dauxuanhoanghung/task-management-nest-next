@@ -1,7 +1,7 @@
-import type {Metadata} from "next";
+import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import {ApolloWrapper} from "@/lib/apollo-wrapper";
+import { ApolloWrapper } from "@/lib/apollo-wrapper";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description: "Task Management System",
 };
 
-const RootLayout = ({children}: Readonly<{children: React.ReactNode}>) => {
+const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
