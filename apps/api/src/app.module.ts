@@ -1,3 +1,4 @@
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -5,8 +6,10 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 
-import { UserModule } from './modules/user/users.module';
 import { AccountModule } from './modules/account/account.module';
+import { SmtpTransport } from './modules/mail/infrastructure/transports/smtp.transport';
+import { MailModule } from './modules/mail/mail.module';
+import { UserModule } from './modules/user/users.module';
 
 @Module({
   imports: [
@@ -40,13 +43,30 @@ import { AccountModule } from './modules/account/account.module';
       driver: ApolloDriver,
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (configService: ConfigService) => {
+      useFactory: () => {
         return {
           autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
           sortSchema: true,
-          playground: configService.get<boolean>('GRAPHQL_PLAYGROUND') ?? true,
+          graphiql: false,
+          playground: false,
           path: '/graphql',
+          plugins: [ApolloServerPluginLandingPageLocalDefault()],
         };
+      },
+    }),
+    MailModule.forRoot({
+      useFactory: (config: ConfigService) =>
+        new SmtpTransport({
+          host: config.get<string>('MAIL_HOST', ''),
+          port: config.get<number>('MAIL_PORT', 587),
+          auth: {
+            user: config.get<string>('MAIL_USER', ''),
+            pass: config.get<string>('MAIL_PASS', ''),
+          },
+        }),
+      inject: [ConfigService],
+      config: {
+        from: 'noreply@app.com',
       },
     }),
     UserModule,

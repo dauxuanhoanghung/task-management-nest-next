@@ -1,0 +1,29 @@
+<style>
+  .container {
+    font-family:
+      -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+      sans-serif;
+    color: #111827;
+    line-height: 1.5;
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  .muted {
+    color: #6b7280;
+    font-size: 12px;
+  }
+</style>
+
+<div class='container'>
+  <h2>Welcome to {{appName}}</h2>
+  <p>Hi {{userName}},</p>
+  <p>We're excited to have you on board. Here are a few quick links to get
+    started:</p>
+  <ul>
+    <li><a href='{{dashboardUrl}}'>Your dashboard</a></li>
+    <li><a href='{{docsUrl}}'>Documentation</a></li>
+  </ul>
+  <p>Let us know if you need any help.</p>
+  <p class='muted'>This email was sent to {{email}}.</p>
+</div>
